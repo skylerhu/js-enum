@@ -6,9 +6,11 @@
 [![GitHub License](https://img.shields.io/github/license/SkylerHu/js-enum)](https://github.com/SkylerHu/js-enum)
 
 
-Enum is a javascript enumeration module. It works with Node.js and the browser.
+## 一个用于 Node.js 与浏览器的 JavaScript 枚举工具
 
-构建Enum对象在JavaScript中使用，可用于枚举定义，前端组件单选、多选等的options选项的定义。
+`js-enumerate` 是一个可在 Node.js 与浏览器环境运行的 JavaScript 枚举工具。它支持通过对象或数组快速构建 Enum 实例，内置成员校验与只读冻结能力，并提供 `options`/`filters` 等前端友好的数据转换方法，便于在单选、多选、下拉和表格筛选等组件中复用统一的枚举定义。
+
+`js-enumerate` is a JavaScript enum utility for both Node.js and browser environments. It supports building Enum instances from arrays or objects, provides built-in member validation and immutable freezing, and offers frontend-friendly `options`/`filters` transformations for radios, checkboxes, selects, and table filters.
 
 ## 1. 安装
 
@@ -32,7 +34,7 @@ new Enum({
 });
 ```
 
-### 1.2 Bower
+### 1.2 Browser
 
 ```html
 <script src="releases/js-enumerate-latest.min.js"></script>
@@ -60,8 +62,10 @@ options参数说明
 
 | 参数 | 类型 | 说明 | 默认值 | 版本 |
 | - | - | - | - | - |
-| freez | bool | 初始化枚举成员,只读不允许修改 | true |  |
-| allDefaultValue | object | 定义刷选默认"全部"的场景 | { key: '__ALL', value: '', label: '全部' } |  |
+| freez | boolean | 是否冻结枚举实例及成员（冻结后不可修改） | true |  |
+| allDefaultValue | object | 定义“全部”选项的默认值（用于 `filters`/`getOptions`） | { key: '__ALL', value: '', label: '全部' } |  |
+
+> 注意：参数名为 `freez`（库内既有命名），不是 `freeze`。
 
 
 ### 2.2 全局注册register
@@ -117,7 +121,7 @@ const ColorV2 = new Enum({
   Red: 'red',
   green: 'green',
 });
-ColorV2.toJSON(); // [{"key":"Red","value":"red"},{"key":"blue","value":"blue"}]
+ColorV2.toJSON(); // [{"key":"Red","value":"red"},{"key":"green","value":"green"}]
 // 注意区分大小写，字典属性字段为成员的key
 ColorV2.Red // 'red'
 ColorV2.green // 'green'
@@ -138,10 +142,11 @@ const Color = new Enum([
 // 依次应用于 下拉选项、单选框、表格字段的筛选菜单项
 const App = () => (
   <>
-    {/*使用filters可以选择“全部”*/}
+    {/* filters 默认包含“全部”选项 */}
     <Select defaultValue={Color.RED} options={Color.filters} />
     <Radio.Group defaultValue={Color.GREEN} options={Color.options} />
-    <Table colums={[{ key: 'color', title: '颜色', filters: Color.toFilters() }]}/>
+    {/* toFilters() 适配 Antd Table filters: { text, value } */}
+    <Table columns={[{ key: 'color', title: '颜色', filters: Color.toFilters() }]}/>
   </>
 );
 ```
@@ -177,23 +182,25 @@ redEdit.label // '大红色'
 
 ### 2.6 内置属性
 - `length` 枚举实例所有成员个数
-- `options` 可用于下拉选择的数组数据
-- `filters` 可用于刷选的数组数据，比options多一个`value=''`的成员
+- `options` 不包含“全部”选项，等价于 `getOptions({ enableAll: false })`
+- `filters` 包含“全部”选项，等价于 `getOptions()`
 
 ### 2.7 Enum object API
 - `forEach`,`map`,`filter` 这三个方法是对枚举成员迭代器进行遍历操作
 - `getMember(value)` 通过value获取成员对象
 - `has(value)` 值value是否在枚举定义的成员当中
 - `getLabel(value)` 通过value获取成员label用于展示
-- `toFilters()` 转换成ant design/element中表格table组件filters需要的刷选条件
-- `getOptions(option = {})` 根据所有成员信息返回数组数据
+- `toJSON()` 返回当前枚举成员数组，可直接被 `JSON.stringify()` 调用
+- `toFilters(options = {})` 转换成 ant design/element 的 table `filters` 数据（默认键名为 `text`/`value`，且不包含“全部”）
+- `to_filters(options = {})` 兼容旧方法（已废弃，内部会提示使用 `toFilters`）
+- `getOptions(options = {})` 根据所有成员信息返回数组数据，可通过 `enableAll/keyValue/keyLabel/allDefaultValue` 自定义
 - `Enum.register(key = 'Enum')`类的静态方法，用于全局注册对象
 
 ### 2.8 其他注意事项
 - 成员key属性只能由数字、大小写字母、中横线、下划线组成的`字符串`，且不能以`__`开头；
 - 成员key属性不能使用内置属性字符串，例如`length/options/filters`不能使用；
 - 成员`value`不能为`null`和`undefined`；
-- 成员`label`不能为`null`和`''`；
+- 成员`label`不能为`null`和`''`；若不传 `label`，展示时默认回退为 `value`；
 - 枚举实例成员默认都被`freez`冻结，不允许修改；
 
 
