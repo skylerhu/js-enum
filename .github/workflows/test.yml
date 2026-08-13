@@ -73,4 +73,5 @@ jobs:
         with:
           files: .coverage/lcov.info
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: skylerhu/js-enum
           fail_ci_if_error: false
