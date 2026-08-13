@@ -71,7 +71,6 @@ jobs:
       - name: upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          files: .coverage/lcov.info
+          directory: .coverage
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: skylerhu/js-enum
           fail_ci_if_error: false
