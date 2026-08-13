@@ -19,7 +19,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "webpack --config webpack.config.js",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "devDependencies": {
     "@babel/core": "~7.24.4",
