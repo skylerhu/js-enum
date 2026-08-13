@@ -50,13 +50,13 @@
     "react-enum",
     "vue-enum"
   ],
-  "homepage": "https://github.com/SkylerHu/js-enum",
+  "homepage": "https://github.com/skylerhu/js-enum",
   "repository": {
     "type": "git",
-    "url": "git@github.com:SkylerHu/js-enum.git"
+    "url": "git@github.com:skylerhu/js-enum.git"
   },
   "bugs": {
-    "url": "https://github.com/SkylerHu/js-enum/issues"
+    "url": "https://github.com/skylerhu/js-enum/issues"
   },
   "license": "MIT"
 }

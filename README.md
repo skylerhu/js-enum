@@ -4,9 +4,9 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/js-enumerate)](https://bundlephobia.com/package/js-enumerate)
 [![Node Version](https://img.shields.io/node/v/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
-[![GitHub Actions Workflow Status](https://github.com/SkylerHu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/SkylerHu/js-enum/actions/workflows/test.yml)
+[![GitHub Actions Workflow Status](https://github.com/skylerhu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/skylerhu/js-enum/actions/workflows/test.yml)
 [![codecov](https://codecov.io/github/skylerhu/js-enum/graph/badge.svg?token=4EH2MHP83H)](https://codecov.io/github/skylerhu/js-enum)
-[![GitHub License](https://img.shields.io/github/license/SkylerHu/js-enum)](https://github.com/SkylerHu/js-enum/blob/master/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/skylerhu/js-enum)](https://github.com/skylerhu/js-enum/blob/master/LICENSE)
 
 > A JavaScript enum utility for Node.js and browser environments.
 >
@@ -329,4 +329,4 @@ redEdit.label;            // '大红色'
 
 ## License
 
-[MIT](./LICENSE) © [SkylerHu](https://github.com/SkylerHu)
+[MIT](./LICENSE) © [SkylerHu](https://github.com/skylerhu)

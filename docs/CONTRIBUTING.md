@@ -21,7 +21,7 @@ brew install jq
 
 ```bash
 # 克隆仓库
-git clone git@github.com:SkylerHu/js-enum.git
+git clone git@github.com:skylerhu/js-enum.git
 cd js-enum
 
 # 安装依赖
