@@ -10,201 +10,192 @@
 
 **[English](./README.md)** | **中文**
 
-## 简介
+一个适用于 **Node.js** 和**浏览器**的 JavaScript 枚举工具。支持通过数组或对象快速构建类型安全、不可变的 Enum 实例，内置校验、迭代能力，并提供前端友好的数据转换方法，适用于下拉框、单选、多选、表格筛选等场景。
 
-`js-enumerate` 是一个可在 Node.js 与浏览器环境运行的 JavaScript 枚举工具。它支持通过对象或数组快速构建 Enum 实例，内置成员校验与只读冻结能力，并提供 `options`/`filters` 等前端友好的数据转换方法，便于在单选、多选、下拉和表格筛选等组件中复用统一的枚举定义。
+## 特性
 
-## 1. 安装
+- 支持**数组**和**普通对象**两种构造方式
+- 成员默认**冻结**（不可变）
+- 内置 `has()`、`getMember()`、`getLabel()` 校验与查找方法
+- 可迭代 — 支持 `for...of`、`map`、`forEach`、`filter`
+- 前端友好的 `options` / `filters` / `toFilters()`，适配 Ant Design、Element UI 等
+- 通过 `Enum.register()` 全局注册
+- 同时支持 Node.js (CommonJS) 和浏览器 (UMD)
 
-可查看版本变更记录 [变更日志](./docs/CHANGELOG-1.x.zh.md)
+## 目录
 
-### 1.1 Node.js
+- [安装](#安装)
+- [快速开始](#快速开始)
+- [使用指南](#使用指南)
+  - [构造函数](#构造函数)
+  - [全局注册](#全局注册)
+  - [前端组件集成](#前端组件集成)
+  - [扩展用法](#扩展用法)
+- [API 参考](#api-参考)
+  - [属性](#属性)
+  - [方法](#方法)
+- [注意事项](#注意事项)
+- [贡献](#贡献)
+- [变更日志](#变更日志)
+- [许可证](#许可证)
+- [相关项目](#相关项目)
 
-	npm install js-enumerate
+## 安装
 
-```javascript
-import Enum from 'js-enumerate';
-
-new Enum([
-  { key: 'RED', value: 'red', label: '红色' },
-  { key: 'GREEN', value: 'green', label: '绿色' },
-]);
-// 也可使用字典构造
-new Enum({
-  Red: 'red',
-  green: 'green',
-});
+```bash
+npm install js-enumerate
 ```
 
-### 1.2 浏览器
+浏览器环境可直接引入 UMD 打包文件：
 
 ```html
 <script src="releases/js-enumerate-latest.min.js"></script>
-<script>
-    new Enum([{ key: 'RED', value: 'red', label: '红色' }]);
-</script>
 ```
 
-> 提示：可自行将 [releases/js-enumerate-latest.min.js](./releases/js-enumerate-latest.min.js) 文件上传到 CDN、或者拷贝到项目里引用。
+> 可将 [releases/js-enumerate-latest.min.js](./releases/js-enumerate-latest.min.js) 上传至 CDN 或拷贝到项目中引用。
 
-## 2. 使用
+## 快速开始
 
-### 2.1 构造函数
-
-    new Enum(data, options)
-
-参数说明：
-
-| 参数 | 类型 | 说明 | 默认值 | 版本 |
-| - | - | - | - | - |
-| data | array/object | 初始化枚举成员 | | |
-| options | object | 配置选项 | | |
-
-options 参数说明：
-
-| 参数 | 类型 | 说明 | 默认值 | 版本 |
-| - | - | - | - | - |
-| freez | boolean | 是否冻结枚举实例及成员（冻结后不可修改） | true |  |
-| allDefaultValue | object | 定义"全部"选项的默认值（用于 `filters`/`getOptions`） | { key: '__ALL', value: '', label: '全部' } |  |
-
-> 注意：参数名为 `freez`（库内既有命名），不是 `freeze`。
-
-
-### 2.2 全局注册
 ```javascript
-// 在 Node.js 中定义 global.Enum
-// 在浏览器中定义 window.Enum
-Enum.register();
-// 可以通过 key 更改对象的名称
-Enum.register("JsEnum"); // window.JsEnum
-```
-
-### 2.3 基础用法
-```javascript
-const Color = new Enum([
-  { key: 'RED', value: 'red', label: '红色' },
-  { key: 'GREEN', value: 'green', label: '绿色' },
-]);
-// 使用成员值
-Color.RED // 'red'
-Color.GREEN // 'green'
-// 成员个数
-Color.length // 2
-
-Color.toJSON(); // 返回数组 [{"key":"RED","value":"red","label":"红色"},{"key":"GREEN","value":"green","label":"绿色"}]
-JSON.stringify(Color); // 返回字符串 '[{"key":"RED","value":"red","label":"红色"},{"key":"GREEN","value":"green","label":"绿色"}]'
-
-// 获取成员
-const member = Color.getMember('red'); // 返回单个成员对象 {"key":"RED","value":"red","label":"红色"}
-member.value === 'red'; // true
-member.key; // 'RED'
-member.label; // '红色'
-Color.getLabel(Color.RED); // '红色'
-
-// 判断枚举值是否合法
-Color.has('red'); // true
-Color.has('yellow'); // false
-
-// map、forEach 和 filter 函数都可直接使用
-Color.map(member => member.label); // ['红色', '绿色']
-// 属性成员来自定义枚举的 key
-Object.keys(Color); // ['RED', 'GREEN']
-// 用 in 是遍历 keys
-for (const key in Color) {
-  console.log(key);
-}
-// 用 of 是遍历成员对象
-for (const member of Color) {
-  console.log(member);
-}
-
-// 使用字典构造
-const ColorV2 = new Enum({
-  Red: 'red',
-  green: 'green',
-});
-ColorV2.toJSON(); // [{"key":"Red","value":"red"},{"key":"green","value":"green"}]
-// 注意区分大小写，字典属性字段为成员的 key
-ColorV2.Red // 'red'
-ColorV2.green // 'green'
-```
-
-### 2.4 前端组件中使用
-使用 `React + Ant Design` 举例：
-```jsx
-import React from 'react';
-import { Select, Radio, Table } from 'antd';
-// 可以直接在 index.js 入口文件中执行 Enum.register()，即可全局使用
 import Enum from 'js-enumerate';
 
 const Color = new Enum([
   { key: 'RED', value: 'red', label: '红色' },
   { key: 'GREEN', value: 'green', label: '绿色' },
 ]);
-// 依次应用于下拉选项、单选框、表格字段的筛选菜单项
+
+Color.RED           // 'red'
+Color.GREEN         // 'green'
+Color.length        // 2
+Color.has('red')    // true
+Color.getLabel('red') // '红色'
+
+// 迭代
+Color.map(m => m.label); // ['红色', '绿色']
+
+// 通过普通对象构造
+const Status = new Enum({ Active: 1, Inactive: 0 });
+Status.Active  // 1
+```
+
+## 使用指南
+
+### 构造函数
+
+```javascript
+new Enum(data, options)
+```
+
+| 参数 | 类型 | 说明 | 默认值 |
+| --- | --- | --- | --- |
+| data | array / object | 枚举成员数据 | — |
+| options | object | 配置选项 | — |
+
+**options 参数：**
+
+| 参数 | 类型 | 说明 | 默认值 |
+| --- | --- | --- | --- |
+| freez | boolean | 是否冻结枚举实例及成员（冻结后不可修改） | `true` |
+| allDefaultValue | object | "全部"选项的默认值（用于 `filters` / `getOptions`） | `{ key: '__ALL', value: '', label: '全部' }` |
+
+> 注意：参数名为 `freez`（库内既有命名），不是 `freeze`。
+
+### 全局注册
+
+```javascript
+Enum.register();       // global.Enum (Node.js) / window.Enum (浏览器)
+Enum.register('JsEnum'); // window.JsEnum
+```
+
+### 前端组件集成
+
+以 **React + Ant Design** 为例：
+
+```jsx
+import Enum from 'js-enumerate';
+import { Select, Radio, Table } from 'antd';
+
+const Color = new Enum([
+  { key: 'RED', value: 'red', label: '红色' },
+  { key: 'GREEN', value: 'green', label: '绿色' },
+]);
+
 const App = () => (
   <>
-    {/* filters 默认包含"全部"选项 */}
     <Select defaultValue={Color.RED} options={Color.filters} />
     <Radio.Group defaultValue={Color.GREEN} options={Color.options} />
-    {/* toFilters() 适配 Antd Table filters: { text, value } */}
-    <Table columns={[{ key: 'color', title: '颜色', filters: Color.toFilters() }]}/>
+    <Table columns={[{ key: 'color', title: '颜色', filters: Color.toFilters() }]} />
   </>
 );
 ```
 
-### 2.5 其他扩展用法
+### 扩展用法
+
 ```javascript
 const Color = new Enum([
   { key: 'RED', value: 'red', label: '红色', disabled: true, color: '#f00' },
   { key: 'GREEN', value: 'green', label: '绿色', extra: { msg: '其他信息' }, color: '#0f0' },
 ]);
-const redMem = Color.getMember(Color.RED);
-redMem.disabled // true
-redMem.color // '#f00'
-const greenMem = Color.getMember(Color.GREEN);
-greenMem.extra // { msg: '其他信息' }
 
-// 以下非读操作会报错
-Color.RED = 'red-v2'; // Throws Error
-delete Color.RED; // Throws Error
-redMem.label = '大红色'; // Throws Error
+Color.getMember('red').disabled // true
+Color.getMember('green').extra  // { msg: '其他信息' }
 
-// 可以通过 options.freez 不冻结枚举实例
-// 但不建议这么使用，容易出现不可预期的事情
-const ColorEdit = new Enum([
-  { key: 'RED', value: 'red', label: '红色' },
-  { key: 'GREEN', value: 'green', label: '绿色' },
+// 默认冻结 — 写操作会抛出异常
+Color.RED = 'new'; // Throws Error
+
+// 通过 freez 取消冻结（不推荐）
+const Mutable = new Enum([
+  { key: 'A', value: 1, label: 'Alpha' },
 ], { freez: false });
-const redEdit = ColorEdit.getMember(ColorEdit.RED);
-redEdit.label // '红色'
-redEdit.label = '大红色' // true
-redEdit.label // '大红色'
 ```
 
-### 2.6 内置属性
-- `length` 枚举实例所有成员个数
-- `options` 不包含"全部"选项，等价于 `getOptions({ enableAll: false })`
-- `filters` 包含"全部"选项，等价于 `getOptions()`
+## API 参考
 
-### 2.7 枚举对象 API
-- `forEach`、`map`、`filter` 这三个方法是对枚举成员迭代器进行遍历操作
-- `getMember(value)` 通过 value 获取成员对象
-- `has(value)` 值 value 是否在枚举定义的成员当中
-- `getLabel(value)` 通过 value 获取成员 label 用于展示
-- `toJSON()` 返回当前枚举成员数组，可直接被 `JSON.stringify()` 调用
-- `toFilters(options = {})` 转换成 Ant Design / Element 的 Table `filters` 数据（默认键名为 `text`/`value`，且不包含"全部"）
-- `to_filters(options = {})` 兼容旧方法（已废弃，内部会提示使用 `toFilters`）
-- `getOptions(options = {})` 根据所有成员信息返回数组数据，可通过 `enableAll`/`keyValue`/`keyLabel`/`allDefaultValue` 自定义
-- `Enum.register(key = 'Enum')` 类的静态方法，用于全局注册对象
+### 属性
 
-### 2.8 其他注意事项
-- 成员 key 属性只能由数字、大小写字母、中横线、下划线组成的`字符串`，且不能以 `__` 开头；
-- 成员 key 属性不能使用内置属性字符串，例如 `length`/`options`/`filters` 不能使用；
-- 成员 `value` 不能为 `null` 和 `undefined`；
-- 成员 `label` 不能为 `null` 和 `''`；若不传 `label`，展示时默认回退为 `value`；
-- 枚举实例成员默认都被 `freez` 冻结，不允许修改；
+| 属性 | 说明 |
+| --- | --- |
+| `length` | 枚举成员总数 |
+| `options` | 不含"全部"选项的成员列表，等价于 `getOptions({ enableAll: false })` |
+| `filters` | 包含"全部"选项的成员列表，等价于 `getOptions()` |
 
+### 方法
 
-## 3. 推荐
-- 若后端使用 Python 语言，推荐 [py-enum](https://github.com/skylerhu/py-enum) 配合该库一起使用
+| 方法 | 说明 |
+| --- | --- |
+| `has(value)` | 判断值是否存在于枚举中 |
+| `getMember(value)` | 通过 value 获取成员对象 |
+| `getLabel(value)` | 通过 value 获取成员的 label |
+| `forEach(fn)` | 遍历枚举成员 |
+| `map(fn)` | 映射枚举成员并返回数组 |
+| `filter(fn)` | 过滤枚举成员并返回数组 |
+| `toJSON()` | 返回成员数组，兼容 `JSON.stringify()` |
+| `toFilters(options?)` | 转换为 Ant Design / Element 表格筛选格式（`{ text, value }`，默认不含"全部"） |
+| `getOptions(options?)` | 返回成员数组，支持通过 `enableAll` / `keyValue` / `keyLabel` / `allDefaultValue` 自定义 |
+| `Enum.register(key?)` | 静态方法 — 全局注册 Enum（默认 key 为 `'Enum'`） |
+
+> `to_filters()` 为 `toFilters()` 的旧别名（已废弃），将在未来版本移除。
+
+## 注意事项
+
+- 成员 `key` 只能包含字母、数字、中横线、下划线，且不能以 `__` 开头。
+- 成员 `key` 不能使用保留属性名：`length`、`options`、`filters`。
+- 成员 `value` 不能为 `null` 或 `undefined`。
+- 成员 `label` 不能为 `null` 或 `''`；若不传 `label`，展示时回退为 `value`。
+- 枚举实例默认冻结（`freez: true`），不允许修改。
+
+## 贡献
+
+请参阅 [贡献指南](./docs/CONTRIBUTING.zh.md) 了解开发环境搭建与贡献规范。
+
+## 变更日志
+
+请参阅 [变更日志](./docs/CHANGELOG-1.x.zh.md) 了解版本历史。
+
+## 许可证
+
+[MIT](./LICENSE)
+
+## 相关项目
+
+- [py-enum](https://github.com/skylerhu/py-enum) — Python 枚举工具，API 风格一致，适合全栈项目统一枚举定义。

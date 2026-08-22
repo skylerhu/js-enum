@@ -10,201 +10,192 @@
 
 **English** | **[中文](./README.zh.md)**
 
-## Introduction
+A JavaScript enum utility for **Node.js** and **browsers**. Build type-safe, immutable Enum instances from arrays or objects — with built-in validation, iteration, and frontend-friendly data transformations for selects, radios, checkboxes, and table filters.
 
-`js-enumerate` is a JavaScript enum utility for both Node.js and browser environments. It supports building Enum instances from arrays or objects, provides built-in member validation and immutable freezing, and offers frontend-friendly `options`/`filters` transformations for radios, checkboxes, selects, and table filters.
+## Features
 
-## 1. Installation
+- Build enums from **arrays** or **plain objects**
+- Members are **frozen by default** (immutable)
+- Built-in `has()`, `getMember()`, `getLabel()` for validation and lookup
+- Iterable — supports `for...of`, `map`, `forEach`, `filter`
+- Frontend-ready `options` / `filters` / `toFilters()` for Ant Design, Element UI, etc.
+- Global registration via `Enum.register()`
+- Works in Node.js (CommonJS) and browsers (UMD)
 
-See [Changelog](./docs/CHANGELOG-1.x.md) for version history.
+## Table of Contents
 
-### 1.1 Node.js
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+  - [Constructor](#constructor)
+  - [Global Registration](#global-registration)
+  - [Frontend Component Integration](#frontend-component-integration)
+  - [Advanced Usage](#advanced-usage)
+- [API Reference](#api-reference)
+  - [Properties](#properties)
+  - [Methods](#methods)
+- [Notes](#notes)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+- [License](#license)
+- [Related Projects](#related-projects)
 
-	npm install js-enumerate
+## Installation
 
-```javascript
-import Enum from 'js-enumerate';
-
-new Enum([
-  { key: 'RED', value: 'red', label: 'Red' },
-  { key: 'GREEN', value: 'green', label: 'Green' },
-]);
-// Or construct from a plain object
-new Enum({
-  Red: 'red',
-  green: 'green',
-});
+```bash
+npm install js-enumerate
 ```
 
-### 1.2 Browser
+For browser usage, include the UMD bundle directly:
 
 ```html
 <script src="releases/js-enumerate-latest.min.js"></script>
-<script>
-    new Enum([{ key: 'RED', value: 'red', label: 'Red' }]);
-</script>
 ```
 
-> Tip: You can upload [releases/js-enumerate-latest.min.js](./releases/js-enumerate-latest.min.js) to your CDN or copy it directly into your project.
+> You can upload [releases/js-enumerate-latest.min.js](./releases/js-enumerate-latest.min.js) to your CDN or copy it into your project.
 
-## 2. Usage
+## Quick Start
 
-### 2.1 Constructor
-
-    new Enum(data, options)
-
-Parameters:
-
-| Parameter | Type | Description | Default | Since |
-| - | - | - | - | - |
-| data | array/object | Initial enum members | | |
-| options | object | Configuration options | | |
-
-Options:
-
-| Parameter | Type | Description | Default | Since |
-| - | - | - | - | - |
-| freez | boolean | Whether to freeze the enum instance and its members (immutable after creation) | true |  |
-| allDefaultValue | object | Default value for the "All" option (used by `filters`/`getOptions`) | { key: '__ALL', value: '', label: 'All' } |  |
-
-> Note: The parameter name is `freez` (existing library naming convention), not `freeze`.
-
-
-### 2.2 Global Registration
 ```javascript
-// Defines global.Enum in Node.js
-// Defines window.Enum in browsers
-Enum.register();
-// Customize the global name via key
-Enum.register("JsEnum"); // window.JsEnum
-```
-
-### 2.3 Basic Usage
-```javascript
-const Color = new Enum([
-  { key: 'RED', value: 'red', label: 'Red' },
-  { key: 'GREEN', value: 'green', label: 'Green' },
-]);
-// Access member values
-Color.RED // 'red'
-Color.GREEN // 'green'
-// Member count
-Color.length // 2
-
-Color.toJSON(); // Returns array [{"key":"RED","value":"red","label":"Red"},{"key":"GREEN","value":"green","label":"Green"}]
-JSON.stringify(Color); // Returns string '[{"key":"RED","value":"red","label":"Red"},{"key":"GREEN","value":"green","label":"Green"}]'
-
-// Get a member
-const member = Color.getMember('red'); // Returns member object {"key":"RED","value":"red","label":"Red"}
-member.value === 'red'; // true
-member.key; // 'RED'
-member.label; // 'Red'
-Color.getLabel(Color.RED); // 'Red'
-
-// Check if a value is valid
-Color.has('red'); // true
-Color.has('yellow'); // false
-
-// map, forEach, and filter work directly
-Color.map(member => member.label); // ['Red', 'Green']
-// Enumerable keys are the member keys
-Object.keys(Color); // ['RED', 'GREEN']
-// for...in iterates over keys
-for (const key in Color) {
-  console.log(key);
-}
-// for...of iterates over member objects
-for (const member of Color) {
-  console.log(member);
-}
-
-// Construct from a plain object
-const ColorV2 = new Enum({
-  Red: 'red',
-  green: 'green',
-});
-ColorV2.toJSON(); // [{"key":"Red","value":"red"},{"key":"green","value":"green"}]
-// Keys are case-sensitive
-ColorV2.Red // 'red'
-ColorV2.green // 'green'
-```
-
-### 2.4 Frontend Component Integration
-Example with `React + Ant Design`:
-```jsx
-import React from 'react';
-import { Select, Radio, Table } from 'antd';
-// Call Enum.register() in your entry file (e.g. index.js) for global access
 import Enum from 'js-enumerate';
 
 const Color = new Enum([
   { key: 'RED', value: 'red', label: 'Red' },
   { key: 'GREEN', value: 'green', label: 'Green' },
 ]);
-// Used in Select, Radio, and Table column filters
+
+Color.RED           // 'red'
+Color.GREEN         // 'green'
+Color.length        // 2
+Color.has('red')    // true
+Color.getLabel('red') // 'Red'
+
+// Iterate
+Color.map(m => m.label); // ['Red', 'Green']
+
+// Construct from a plain object
+const Status = new Enum({ Active: 1, Inactive: 0 });
+Status.Active  // 1
+```
+
+## Usage
+
+### Constructor
+
+```javascript
+new Enum(data, options)
+```
+
+| Parameter | Type | Description | Default |
+| --- | --- | --- | --- |
+| data | array / object | Enum members | — |
+| options | object | Configuration | — |
+
+**Options:**
+
+| Parameter | Type | Description | Default |
+| --- | --- | --- | --- |
+| freez | boolean | Freeze the instance and members (immutable) | `true` |
+| allDefaultValue | object | Default "All" option for `filters` / `getOptions` | `{ key: '__ALL', value: '', label: 'All' }` |
+
+> The parameter name is `freez` (existing library convention), not `freeze`.
+
+### Global Registration
+
+```javascript
+Enum.register();       // global.Enum (Node.js) / window.Enum (browser)
+Enum.register('JsEnum'); // window.JsEnum
+```
+
+### Frontend Component Integration
+
+Example with **React + Ant Design**:
+
+```jsx
+import Enum from 'js-enumerate';
+import { Select, Radio, Table } from 'antd';
+
+const Color = new Enum([
+  { key: 'RED', value: 'red', label: 'Red' },
+  { key: 'GREEN', value: 'green', label: 'Green' },
+]);
+
 const App = () => (
   <>
-    {/* filters includes an "All" option by default */}
     <Select defaultValue={Color.RED} options={Color.filters} />
     <Radio.Group defaultValue={Color.GREEN} options={Color.options} />
-    {/* toFilters() adapts to Antd Table filters: { text, value } */}
-    <Table columns={[{ key: 'color', title: 'Color', filters: Color.toFilters() }]}/>
+    <Table columns={[{ key: 'color', title: 'Color', filters: Color.toFilters() }]} />
   </>
 );
 ```
 
-### 2.5 Advanced Usage
+### Advanced Usage
+
 ```javascript
 const Color = new Enum([
   { key: 'RED', value: 'red', label: 'Red', disabled: true, color: '#f00' },
-  { key: 'GREEN', value: 'green', label: 'Green', extra: { msg: 'extra info' }, color: '#0f0' },
+  { key: 'GREEN', value: 'green', label: 'Green', extra: { msg: 'info' }, color: '#0f0' },
 ]);
-const redMem = Color.getMember(Color.RED);
-redMem.disabled // true
-redMem.color // '#f00'
-const greenMem = Color.getMember(Color.GREEN);
-greenMem.extra // { msg: 'extra info' }
 
-// Write operations throw errors
-Color.RED = 'red-v2'; // Throws Error
-delete Color.RED; // Throws Error
-redMem.label = 'Dark Red'; // Throws Error
+Color.getMember('red').disabled // true
+Color.getMember('green').extra  // { msg: 'info' }
 
-// Disable freezing via options.freez
-// Not recommended — may lead to unexpected behavior
-const ColorEdit = new Enum([
-  { key: 'RED', value: 'red', label: 'Red' },
-  { key: 'GREEN', value: 'green', label: 'Green' },
+// Frozen by default — write operations throw
+Color.RED = 'new'; // Throws Error
+
+// Opt out of freezing (not recommended)
+const Mutable = new Enum([
+  { key: 'A', value: 1, label: 'Alpha' },
 ], { freez: false });
-const redEdit = ColorEdit.getMember(ColorEdit.RED);
-redEdit.label // 'Red'
-redEdit.label = 'Dark Red' // true
-redEdit.label // 'Dark Red'
 ```
 
-### 2.6 Built-in Properties
-- `length` — Total number of enum members
-- `options` — Member list without the "All" option, equivalent to `getOptions({ enableAll: false })`
-- `filters` — Member list with the "All" option, equivalent to `getOptions()`
+## API Reference
 
-### 2.7 Enum Object API
-- `forEach`, `map`, `filter` — Iterate over enum members
-- `getMember(value)` — Get a member object by its value
-- `has(value)` — Check whether a value exists in the enum
-- `getLabel(value)` — Get the label of a member by its value
-- `toJSON()` — Return the enum members as an array, compatible with `JSON.stringify()`
-- `toFilters(options = {})` — Convert to Ant Design / Element table `filters` format (`{ text, value }`, excludes "All" by default)
-- `to_filters(options = {})` — Legacy alias (deprecated, use `toFilters` instead)
-- `getOptions(options = {})` — Return member array with customizable keys via `enableAll`/`keyValue`/`keyLabel`/`allDefaultValue`
-- `Enum.register(key = 'Enum')` — Static method to register the Enum class globally
+### Properties
 
-### 2.8 Notes
-- Member `key` must be a string composed of alphanumeric characters, hyphens, or underscores, and cannot start with `__`.
-- Member `key` cannot use reserved property names such as `length`, `options`, or `filters`.
+| Property | Description |
+| --- | --- |
+| `length` | Total number of enum members |
+| `options` | Member list without "All", equivalent to `getOptions({ enableAll: false })` |
+| `filters` | Member list with "All", equivalent to `getOptions()` |
+
+### Methods
+
+| Method | Description |
+| --- | --- |
+| `has(value)` | Check whether a value exists in the enum |
+| `getMember(value)` | Get a member object by its value |
+| `getLabel(value)` | Get the label of a member by its value |
+| `forEach(fn)` | Iterate over members |
+| `map(fn)` | Map over members and return an array |
+| `filter(fn)` | Filter members and return an array |
+| `toJSON()` | Return members as an array, compatible with `JSON.stringify()` |
+| `toFilters(options?)` | Convert to Ant Design / Element table filters (`{ text, value }`, excludes "All") |
+| `getOptions(options?)` | Return member array with customizable keys via `enableAll` / `keyValue` / `keyLabel` / `allDefaultValue` |
+| `Enum.register(key?)` | Static method — register Enum globally (default key: `'Enum'`) |
+
+> `to_filters()` is a deprecated alias for `toFilters()` and will be removed in a future release.
+
+## Notes
+
+- Member `key` must be alphanumeric (plus `-` and `_`) and cannot start with `__`.
+- Member `key` cannot use reserved names: `length`, `options`, `filters`.
 - Member `value` cannot be `null` or `undefined`.
-- Member `label` cannot be `null` or `''`. If `label` is omitted, `value` is used as fallback for display.
-- Enum instances and their members are frozen (`freez`) by default and cannot be modified.
+- Member `label` cannot be `null` or `''`. If omitted, `value` is used as fallback.
+- Instances are frozen by default (`freez: true`).
 
+## Contributing
 
-## 3. Related Projects
-- For Python backends, consider using [py-enum](https://github.com/skylerhu/py-enum) alongside this library.
+See [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for development setup and guidelines.
+
+## Changelog
+
+See [CHANGELOG](./docs/CHANGELOG-1.x.md) for version history.
+
+## License
+
+[MIT](./LICENSE)
+
+## Related Projects
+
+- [py-enum](https://github.com/skylerhu/py-enum) — Python enum utility with a similar API, great for full-stack consistency.
