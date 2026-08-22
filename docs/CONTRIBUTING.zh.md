@@ -1,6 +1,6 @@
 # 贡献指南
 
-**[English](./CONTRIBUTING.md)** | **中文**
+**中文文档** | [English](CONTRIBUTING.md)
 
 ## 前言
 
@@ -13,10 +13,10 @@
 常用命令：
 - 安装依赖 `npm install .`
 - 初始化 `npm run prepare`
-- 代码格式 `npm run lint`
-- 测试用例 `npm run test`
-- 构建 `npm run build` 构建出来的 `dist/index.js` 可用于浏览器环境使用
-- 发版 `npm publish` 直接使用 `src` 目录下的文件发版
+- 代码检查 `make lint`
+- 运行测试 `make test`
+- 构建 `make build` — 产出 `dist/index.js` 并更新 `releases/` 版本化文件 + latest 符号链接
+- 发版 `make release` — build + `npm publish`
 
 ## 提交 Pull Request
 

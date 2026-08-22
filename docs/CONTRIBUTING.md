@@ -1,6 +1,6 @@
 # Contributing
 
-**English** | **[中文](./CONTRIBUTING.zh.md)**
+[中文文档](CONTRIBUTING.zh.md) | **English**
 
 ## Overview
 
@@ -13,10 +13,10 @@ This document is intended for developers and describes the guidelines to follow 
 Common commands:
 - Install dependencies: `npm install .`
 - Initialize: `npm run prepare`
-- Lint: `npm run lint`
-- Run tests: `npm run test`
-- Build: `npm run build` — produces `dist/index.js` for browser usage
-- Publish: `npm publish` — publishes files from the `src` directory
+- Lint: `make lint`
+- Run tests: `make test`
+- Build: `make build` — produces `dist/index.js` and updates `releases/` with versioned file + latest symlink
+- Release: `make release` — build + `npm publish`
 
 ## Submitting a Pull Request
 

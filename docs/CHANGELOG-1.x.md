@@ -1,11 +1,18 @@
 # Changelog
 
+[中文文档](CHANGELOG-1.x.zh.md) | **English**
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-**English** | **[中文](./CHANGELOG-1.x.zh.md)**
+## 1.1.4 - 2026-08-22
+
+### Docs
+
+- Add bilingual (English / Chinese) documentation support for README, CONTRIBUTING, and CHANGELOG
+- Reorganize documentation structure following open-source best practices
 
 ## 1.1.3
 

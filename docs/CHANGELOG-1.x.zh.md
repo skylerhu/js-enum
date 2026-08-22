@@ -1,11 +1,18 @@
 # 变更日志
 
+**中文文档** | [English](CHANGELOG-1.x.md)
+
 本项目的所有重要变更都将记录在此文件中。
 
 格式基于 [Keep a Changelog](https://keepachangelog.com/)，
 且本项目遵循 [语义化版本](https://semver.org/)。
 
-**[English](./CHANGELOG-1.x.md)** | **中文**
+## 1.1.4 - 2026-08-22
+
+### 文档
+
+- 新增双语（中文 / 英文）文档支持，涵盖 README、CONTRIBUTING 和 CHANGELOG
+- 按照开源项目最佳实践重新整理文档结构
 
 ## 1.1.3
 

@@ -1,5 +1,7 @@
 # js-enumerate
 
+**中文文档** | [English](README.md)
+
 [![NPM Version](https://img.shields.io/npm/v/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![NPM Downloads](https://img.shields.io/npm/dm/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/js-enumerate)](https://bundlephobia.com/package/js-enumerate)
@@ -7,8 +9,6 @@
 [![Test](https://github.com/skylerhu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/skylerhu/js-enum/actions/workflows/test.yml)
 [![Codecov](https://codecov.io/gh/skylerhu/js-enum/graph/badge.svg)](https://codecov.io/gh/skylerhu/js-enum)
 [![License](https://img.shields.io/github/license/skylerhu/js-enum)](https://github.com/skylerhu/js-enum/blob/master/LICENSE)
-
-**[English](./README.md)** | **中文**
 
 一个适用于 **Node.js** 和**浏览器**的 JavaScript 枚举工具。支持通过数组或对象快速构建类型安全、不可变的 Enum 实例，内置校验、迭代能力，并提供前端友好的数据转换方法，适用于下拉框、单选、多选、表格筛选等场景。
 
@@ -21,24 +21,6 @@
 - 前端友好的 `options` / `filters` / `toFilters()`，适配 Ant Design、Element UI 等
 - 通过 `Enum.register()` 全局注册
 - 同时支持 Node.js (CommonJS) 和浏览器 (UMD)
-
-## 目录
-
-- [安装](#安装)
-- [快速开始](#快速开始)
-- [使用指南](#使用指南)
-  - [构造函数](#构造函数)
-  - [全局注册](#全局注册)
-  - [前端组件集成](#前端组件集成)
-  - [扩展用法](#扩展用法)
-- [API 参考](#api-参考)
-  - [属性](#属性)
-  - [方法](#方法)
-- [注意事项](#注意事项)
-- [贡献](#贡献)
-- [变更日志](#变更日志)
-- [许可证](#许可证)
-- [相关项目](#相关项目)
 
 ## 安装
 

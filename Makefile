@@ -1,4 +1,7 @@
-export BROWSER_PYSCRIPT
+LIB_NAME := $(shell jq -r .name package.json)
+LIB_VERSION := $(shell jq -r .version package.json)
+VERSIONED_FILE := $(LIB_NAME)-$(LIB_VERSION).min.js
+LATEST_LINK := $(LIB_NAME)-latest.min.js
 
 define PRINT_HELP_PYSCRIPT
 import re, sys
@@ -10,10 +13,8 @@ for line in sys.stdin:
 		print("%-20s %s" % (target, help))
 endef
 export PRINT_HELP_PYSCRIPT
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
 
-libName=`jq -r .name package.json`
-libVersion=`jq -r .version package.json`
+.PHONY: help clean clean-build clean-install clean-test lint test build release
 
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
@@ -23,7 +24,7 @@ clean: clean-build clean-install clean-test ## remove all build, test, coverage
 clean-build: ## remove build artifacts
 	rm -fr dist/
 
-clean-install: ## remove node_modules. package-lock.json
+clean-install: ## remove node_modules
 	rm -rf node_modules/
 	rm -f package-lock.json
 	npm cache clean --force
@@ -37,12 +38,10 @@ lint: ## check style with eslint
 test: lint ## run tests with coverage
 	npm run test
 
-build: test clean-build ## builds source to dist
+build: test clean-build ## build dist and update releases
 	npm run build
+	cp -n "dist/index.js" "releases/$(VERSIONED_FILE)" || true
+	cd releases && ln -sf "$(VERSIONED_FILE)" "$(LATEST_LINK)"
 
-backup: build ## backup dist to releases folder
-	cp -n "dist/index.js" "releases/${libName}-${libVersion}.min.js" || true
-	cp -f "dist/index.js" "releases/${libName}-latest.min.js"
-
-release: ## package and upload a release
+release: build ## build and publish to npm
 	npm publish
