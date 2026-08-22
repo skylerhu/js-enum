@@ -4,9 +4,9 @@
 [![NPM Downloads](https://img.shields.io/npm/dm/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/js-enumerate)](https://bundlephobia.com/package/js-enumerate)
 [![Node Version](https://img.shields.io/node/v/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
-[![Test](https://github.com/SkylerHu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/SkylerHu/js-enum/actions/workflows/test.yml)
-[![Coveralls](https://img.shields.io/coverallsCoverage/github/SkylerHu/js-enum)](https://coveralls.io/github/SkylerHu/js-enum)
-[![License](https://img.shields.io/github/license/SkylerHu/js-enum)](https://github.com/SkylerHu/js-enum/blob/master/LICENSE)
+[![Test](https://github.com/skylerhu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/skylerhu/js-enum/actions/workflows/test.yml)
+[![Coveralls](https://img.shields.io/coverallsCoverage/github/skylerhu/js-enum)](https://coveralls.io/github/skylerhu/js-enum)
+[![License](https://img.shields.io/github/license/skylerhu/js-enum)](https://github.com/skylerhu/js-enum/blob/master/LICENSE)
 
 **English** | **[中文](./README.zh.md)**
 
@@ -207,4 +207,4 @@ redEdit.label // 'Dark Red'
 
 
 ## 3. Related Projects
-- For Python backends, consider using [py-enum](https://github.com/SkylerHu/py-enum) alongside this library.
+- For Python backends, consider using [py-enum](https://github.com/skylerhu/py-enum) alongside this library.
