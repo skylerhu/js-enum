@@ -1,5 +1,7 @@
 # js-enumerate
 
+[中文文档](README.zh.md) | **English**
+
 [![NPM Version](https://img.shields.io/npm/v/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![NPM Downloads](https://img.shields.io/npm/dm/js-enumerate)](https://www.npmjs.com/package/js-enumerate)
 [![Bundle Size](https://img.shields.io/bundlephobia/minzip/js-enumerate)](https://bundlephobia.com/package/js-enumerate)
@@ -7,8 +9,6 @@
 [![Test](https://github.com/skylerhu/js-enum/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/skylerhu/js-enum/actions/workflows/test.yml)
 [![Codecov](https://codecov.io/gh/skylerhu/js-enum/graph/badge.svg)](https://codecov.io/gh/skylerhu/js-enum)
 [![License](https://img.shields.io/github/license/skylerhu/js-enum)](https://github.com/skylerhu/js-enum/blob/master/LICENSE)
-
-**English** | **[中文](./README.zh.md)**
 
 A JavaScript enum utility for **Node.js** and **browsers**. Build type-safe, immutable Enum instances from arrays or objects — with built-in validation, iteration, and frontend-friendly data transformations for selects, radios, checkboxes, and table filters.
 
@@ -21,24 +21,6 @@ A JavaScript enum utility for **Node.js** and **browsers**. Build type-safe, imm
 - Frontend-ready `options` / `filters` / `toFilters()` for Ant Design, Element UI, etc.
 - Global registration via `Enum.register()`
 - Works in Node.js (CommonJS) and browsers (UMD)
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Usage](#usage)
-  - [Constructor](#constructor)
-  - [Global Registration](#global-registration)
-  - [Frontend Component Integration](#frontend-component-integration)
-  - [Advanced Usage](#advanced-usage)
-- [API Reference](#api-reference)
-  - [Properties](#properties)
-  - [Methods](#methods)
-- [Notes](#notes)
-- [Contributing](#contributing)
-- [Changelog](#changelog)
-- [License](#license)
-- [Related Projects](#related-projects)
 
 ## Installation
 
