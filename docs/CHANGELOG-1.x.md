@@ -1,18 +1,43 @@
-# Release Notes
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/),
+and this project adheres to [Semantic Versioning](https://semver.org/).
+
+**English** | **[中文](./CHANGELOG-1.x.zh.md)**
 
 ## 1.1.3
-- fix: 规范函数命名规则，使用 `toFilters` 替代 `to_filters`，`to_fitlers`预期会被移除
-- ci: 使用husky配置相关开发规范
 
-## 1.1.2 (2024-12-08)
-- build: package.json去掉type配置，使用默认commonjs
-- style: eslint配置quotes为double，使用双引号
+### Fixed
 
-## 1.0.3 (2024-11-30)
-- build: change engines node >=12
+- Standardize function naming: use `toFilters` instead of `to_filters`; `to_filters` is expected to be removed in a future release
 
-## 1.0.2 (2024-04-23)
-- docs: 修改README文档描述
+### Changed
 
-## 1.0.1 (2024-04-23)
-- build: lib发版
+- Set up development standards using husky
+
+## 1.1.2 - 2024-12-08
+
+### Changed
+
+- Remove `type` field from `package.json`, default to CommonJS
+- Configure ESLint `quotes` rule to `double` (use double quotes)
+
+## 1.0.3 - 2024-11-30
+
+### Changed
+
+- Set engines requirement to `node >= 12`
+
+## 1.0.2 - 2024-04-23
+
+### Docs
+
+- Update README documentation
+
+## 1.0.1 - 2024-04-23
+
+### Added
+
+- Initial release
